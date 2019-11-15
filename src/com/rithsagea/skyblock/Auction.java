@@ -2,6 +2,8 @@ package com.rithsagea.skyblock;
 
 import java.io.IOException;
 
+import com.rithsagea.skyblock.format.AuctionFormat;
+
 public class Auction {
 	public String item_name;
 	public String item_lore;

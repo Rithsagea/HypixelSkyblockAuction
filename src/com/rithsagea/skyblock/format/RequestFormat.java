@@ -1,4 +1,4 @@
-package com.rithsagea.skyblock;
+package com.rithsagea.skyblock.format;
 
 public class RequestFormat {
 	public String success;
