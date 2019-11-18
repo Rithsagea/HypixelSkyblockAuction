@@ -7,11 +7,12 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Base64;
+import java.util.Base64.Encoder;
 import java.util.HashMap;
 import java.util.UUID;
-import java.util.Base64.Encoder;
 
 import com.rithsagea.skyblock.Auction;
+import com.rithsagea.skyblock.Main;
 import com.rithsagea.skyblock.SecureConstants;
 
 public class DatabaseUtil {
@@ -26,26 +27,22 @@ public class DatabaseUtil {
 	public static final String format = "insert into %s (id, item_name, item_lore, amount, start_time, end_time, price) "
 			+ "values(from_base64('%s'), \"%s\", \"%s\", %d, %d, %d, %f)";
 	
+	public static int duplicates = 0;
+	public static int new_items = 0;
+	
 	public static void connectToDB() {
-		System.out.println("Connecting to database");
+		Main.log("Connecting to database\n");
 		try {
 			dbCon = DriverManager.getConnection("jdbc:mysql://" + SecureConstants.databaseLink + "/" + SecureConstants.table + "?"+ 
 												"user=" + SecureConstants.user + "&password=" + SecureConstants.password);
 			statement = dbCon.createStatement();
-			System.out.println("Succesfully connected to db skyblock");
+			Main.log("Succesfully connected auction database\n");
 		} catch (SQLException e) {
-			System.out.println("SQLException: " + e.getMessage());
-		    System.out.println("SQLState: " + e.getSQLState());
-		    System.out.println("VendorError: " + e.getErrorCode());
-		    System.exit(0);
+			e.printStackTrace();
 		}
 	}
 	
 	public static void writeToTable(HashMap<UUID, Auction> data, String tableName) {
-		System.out.println("Writing " + data.size() + " entries into " + tableName);
-		
-		int duplicates = 0;
-		int new_items = 0;
 		
 		for(UUID id : data.keySet()) {
 			try {
@@ -71,13 +68,9 @@ public class DatabaseUtil {
 					new_items++;
 				}
 			} catch (SQLException e) {
-				System.out.println("SQLException: " + e.getMessage());
-			    System.out.println("SQLState: " + e.getSQLState());
-			    System.out.println("VendorError: " + e.getErrorCode());
+				e.printStackTrace();
 			}
 		}
-		System.out.println("Edited " + duplicates + " entries");
-		System.out.println("Created " + new_items + " new items");
 	}
 	
 	public static void readFromTable(HashMap<UUID, Auction> data, String query) {
@@ -95,9 +88,19 @@ public class DatabaseUtil {
 				data.put(a.id, a);
 			}
 		} catch (SQLException e) {
-			System.out.println("SQLException: " + e.getMessage());
-		    System.out.println("SQLState: " + e.getSQLState());
-		    System.out.println("VendorError: " + e.getErrorCode());
+			e.printStackTrace();
+		}
+	}
+	
+	public static void databaseTransfer() {
+		try {
+			statement.execute("insert into auction_log\n" + 
+					"select * from auctions\n" + 
+					"where end_time < " + (System.currentTimeMillis() - 1.8e6));
+			statement.execute("delete from auctions\n" + 
+					"where end_time < " + (System.currentTimeMillis() - 1.8e6));
+		} catch (SQLException e) {
+			e.printStackTrace();
 		}
 	}
 }
