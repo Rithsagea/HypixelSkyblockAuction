@@ -14,8 +14,8 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
 
-import com.rithsagea.skyblock.runnable.DataDownloaderTask;
-import com.rithsagea.skyblock.runnable.ScreenUpdaterTask;
+import com.rithsagea.skyblock.task.DataDownloaderTask;
+import com.rithsagea.skyblock.task.ScreenUpdaterTask;
 import com.rithsagea.skyblock.util.DatabaseUtil;
 
 public class Main {

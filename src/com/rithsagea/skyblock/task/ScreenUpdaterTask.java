@@ -1,4 +1,4 @@
-package com.rithsagea.skyblock.runnable;
+package com.rithsagea.skyblock.task;
 
 import java.util.TimerTask;
 
@@ -9,6 +9,6 @@ public class ScreenUpdaterTask extends TimerTask {
 
 	@Override
 	public void run() {
-		Main.downloaderInfo.setText(String.format("<html>New Entries: %d</html>", DatabaseUtil.new_items));	
+		Main.downloaderInfo.setText(String.format("<html>New Entries: %d<br>Requests Made: %d</html>", DatabaseUtil.new_items, DataDownloaderTask.requests));	
 	}
 }

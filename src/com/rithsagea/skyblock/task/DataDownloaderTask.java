@@ -1,4 +1,4 @@
-package com.rithsagea.skyblock.runnable;
+package com.rithsagea.skyblock.task;
 
 import java.io.IOException;
 import java.util.HashMap;
@@ -14,9 +14,12 @@ public class DataDownloaderTask extends TimerTask {
 	public long time = 0;
 	public boolean status = false;
 	
+	public static int requests = 0;
+	
 	@Override
 	public void run() {
 		if(status) {
+			requests++;
 			time = System.currentTimeMillis();
 			//get literally every single auction in existence (that's less than 2 minutes long)
 			auctions.clear();

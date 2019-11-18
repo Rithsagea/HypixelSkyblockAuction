@@ -27,7 +27,6 @@ public class DatabaseUtil {
 	public static final String format = "insert into %s (id, item_name, item_lore, amount, start_time, end_time, price) "
 			+ "values(from_base64('%s'), \"%s\", \"%s\", %d, %d, %d, %f)";
 	
-	public static int duplicates = 0;
 	public static int new_items = 0;
 	
 	public static void connectToDB() {
@@ -54,7 +53,6 @@ public class DatabaseUtil {
 				if(statement.executeQuery("select * from " + tableName + " where id like from_base64('" + encodedString + "')").next()) {
 					String command = String.format(update, tableName, auction.end, auction.price, encodedString);
 					statement.execute(command);
-					duplicates++;
 				} else {
 					statement.execute(String.format(format,
 												tableName,
