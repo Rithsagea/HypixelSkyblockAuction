@@ -11,6 +11,6 @@ public class ScreenUpdaterTask extends TimerTask {
 	@Override
 	public void run() {
 		Main.log.setText(Logger.getText());
-		Main.downloaderInfo.setText(String.format("<html>New Entries: %d<br>Requests Made: %d</html>", DatabaseUtil.new_items, DataDownloaderTask.requests));	
+		Main.downloaderInfo.setText(String.format("<html>Total Entries: %d<br>New Entries: %d<br>Requests Made: %d</html>",DatabaseUtil.total_items, DatabaseUtil.new_items, DataDownloaderTask.requests));	
 	}
 }

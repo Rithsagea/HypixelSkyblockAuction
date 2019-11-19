@@ -6,6 +6,7 @@ import java.util.TimerTask;
 import java.util.UUID;
 
 import com.rithsagea.skyblock.Auction;
+import com.rithsagea.skyblock.Logger;
 import com.rithsagea.skyblock.util.DatabaseUtil;
 import com.rithsagea.skyblock.util.NetworkUtil;
 
@@ -24,6 +25,7 @@ public class DataDownloaderTask extends TimerTask {
 			//get literally every single auction in existence (that's less than 2 minutes long)
 			auctions.clear();
 			try {
+				Logger.log("Querying api.hypixel.net");
 				for(int x = 0; NetworkUtil.readAuctionPage(NetworkUtil.getAuction(x), auctions); x++);
 			} catch (IOException e) {
 				e.printStackTrace();

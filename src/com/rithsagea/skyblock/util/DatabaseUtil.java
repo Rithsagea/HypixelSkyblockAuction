@@ -9,6 +9,7 @@ import java.sql.Statement;
 import java.util.Base64;
 import java.util.Base64.Encoder;
 import java.util.HashMap;
+import java.util.Set;
 import java.util.UUID;
 
 import com.rithsagea.skyblock.Auction;
@@ -26,8 +27,10 @@ public class DatabaseUtil {
 	public static final String update = "update %s set end_time=%d, price=%f where id like from_base64('%s')";
 	public static final String format = "insert into %s (id, item_name, item_lore, amount, start_time, end_time, price) "
 			+ "values(from_base64('%s'), \"%s\", \"%s\", %d, %d, %d, %f)";
+	public static final String read = "select * from %s where item_name like \"%s\"";
 	
 	public static int new_items = 0;
+	public static long total_items = 0;
 	
 	public static void connectToDB() {
 		Logger.log("Connecting to database");
@@ -40,6 +43,19 @@ public class DatabaseUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		total_items = getTotalItems("auction_log");
+	}
+	
+	public static long getTotalItems(String tableName) {
+		try {
+			ResultSet results = statement.executeQuery("select count(*) from " + tableName);
+			results.next();
+			return results.getLong(1);
+		} catch (SQLException e) {
+			e.printStackTrace();
+		}
+		
+		return -1;
 	}
 	
 	public static void writeToTable(HashMap<UUID, Auction> data, String tableName) {
@@ -72,9 +88,9 @@ public class DatabaseUtil {
 		}
 	}
 	
-	public static void readFromTable(HashMap<UUID, Auction> data, String query) {
+	public static void readFromTable(Set <Auction> data, String query, String tableName) {
 		try {
-			ResultSet results = statement.executeQuery(query);
+			ResultSet results = statement.executeQuery(String.format(read, tableName, query));
 			while(results.next()) {
 				Auction a = new Auction(
 						UUID.nameUUIDFromBytes(results.getBytes("id")),
@@ -84,7 +100,7 @@ public class DatabaseUtil {
 						results.getLong("start_time"),
 						results.getLong("end_time"),
 						results.getDouble("price"));
-				data.put(a.id, a);
+				data.add(a);
 			}
 		} catch (SQLException e) {
 			e.printStackTrace();
@@ -102,5 +118,6 @@ public class DatabaseUtil {
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
+		total_items = getTotalItems("auction_log");
 	}
 }

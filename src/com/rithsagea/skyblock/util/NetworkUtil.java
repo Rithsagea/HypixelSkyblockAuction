@@ -10,7 +10,6 @@ import java.util.UUID;
 
 import com.google.gson.Gson;
 import com.rithsagea.skyblock.Auction;
-import com.rithsagea.skyblock.Main;
 import com.rithsagea.skyblock.SecureConstants;
 import com.rithsagea.skyblock.format.AuctionFormat;
 import com.rithsagea.skyblock.format.RequestFormat;
@@ -34,7 +33,6 @@ public class NetworkUtil {
 			return false;
 		}
 		long time = request.lastUpdated;
-//		System.out.println("timestamp: " + time);
 		for(AuctionFormat au : request.auctions) {
 			if(au.highest_bid_amount > 0 && au.end - time <= 120000) { //2 minutes to milliseconds
 				Auction item = new Auction(au);

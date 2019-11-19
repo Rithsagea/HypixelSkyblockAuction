@@ -9,17 +9,20 @@ import java.sql.SQLException;
 import java.util.ArrayDeque;
 import java.util.Deque;
 import java.util.HashMap;
+import java.util.HashSet;
+import java.util.Set;
 import java.util.Timer;
 import java.util.UUID;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
 import javax.swing.JTextArea;
-import javax.swing.JTextField;
 
+import com.rithsagea.skyblock.graphing.FocusingTextField;
 import com.rithsagea.skyblock.graphing.SkyblockFrame;
 import com.rithsagea.skyblock.task.DataDownloaderTask;
 import com.rithsagea.skyblock.task.ScreenUpdaterTask;
+import com.rithsagea.skyblock.util.CalcUtil;
 import com.rithsagea.skyblock.util.DatabaseUtil;
 
 public class Main {
@@ -32,8 +35,9 @@ public class Main {
 	
 	public static JButton dataDownloadToggle;
 	public static JButton averageCalculateActivator;
+	public static JButton movingAverageActivator;
 	public static JLabel downloaderInfo;
-	public static JTextField itemFilterField;
+	public static FocusingTextField itemFilterField;
 	public static JTextArea averageCalculateResult;
 	public static JTextArea log;
 	
@@ -63,7 +67,7 @@ public class Main {
 		downloaderInfo = new JLabel();
 		downloaderInfo.setBounds(10, 140, 240, 120);
 		
-		itemFilterField = new JTextField(1);
+		itemFilterField = new FocusingTextField("Enter the item name here...");
 		itemFilterField.setBounds(10, 280, 240, 20);
 		
 		averageCalculateActivator = new JButton("Calculate Price");
@@ -95,8 +99,20 @@ public class Main {
 			}
 		});
 		
+		movingAverageActivator = new JButton("Calculate Moving Average");
+		movingAverageActivator.setBounds(10, 340, 240, 20);
+		movingAverageActivator.addActionListener(new ActionListener() {
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				Set<Auction> data = new HashSet<Auction>();
+				DatabaseUtil.readFromTable(data, itemFilterField.getText(), "auction_log");
+				System.out.println("-=-=- " + itemFilterField.getText() + " -=-=-\n");
+				CalcUtil.weightedAverage(data);
+			}
+		});
+		
 		averageCalculateResult = new JTextArea(1, 10);
-		averageCalculateResult.setBounds(10, 340, 240, 160);
+		averageCalculateResult.setBounds(10, 370, 240, 160);
 		averageCalculateResult.setEditable(false);
 		averageCalculateResult.setBackground(null);
 //		averageCalculateResult.setBorder(null);
@@ -114,7 +130,7 @@ public class Main {
 		frame.add(log);
 		frame.add(averageCalculateActivator);
 		frame.add(averageCalculateResult);
-		
+		frame.add(movingAverageActivator);
 		
 		frame.setSize(1080, 720);
 		frame.setLayout(null);
