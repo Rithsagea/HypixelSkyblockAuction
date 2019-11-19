@@ -31,8 +31,8 @@ public class DataDownloaderTask extends TimerTask {
 			//writes all the about to end auctions to the database
 			DatabaseUtil.writeToTable(auctions, "auctions");
 			
-			//migrates old data to long term storage if stuff takes too long
-			if(System.currentTimeMillis() - time > 30000) //30 seconds
+			//moves stuff from temp storage every 30 requests
+			if(requests % 30 == 0)
 				DatabaseUtil.databaseTransfer();
 		}
 	}

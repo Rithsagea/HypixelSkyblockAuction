@@ -12,7 +12,7 @@ import java.util.HashMap;
 import java.util.UUID;
 
 import com.rithsagea.skyblock.Auction;
-import com.rithsagea.skyblock.Main;
+import com.rithsagea.skyblock.Logger;
 import com.rithsagea.skyblock.SecureConstants;
 
 public class DatabaseUtil {
@@ -30,19 +30,20 @@ public class DatabaseUtil {
 	public static int new_items = 0;
 	
 	public static void connectToDB() {
-		Main.log("Connecting to database\n");
+		Logger.log("Connecting to database");
 		try {
 			dbCon = DriverManager.getConnection("jdbc:mysql://" + SecureConstants.databaseLink + "/" + SecureConstants.table + "?"+ 
 												"user=" + SecureConstants.user + "&password=" + SecureConstants.password);
 			statement = dbCon.createStatement();
-			Main.log("Succesfully connected auction database\n");
+			Logger.log("Succesfully connected auction database");
+			statement.execute("truncate auctions");
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
 	}
 	
 	public static void writeToTable(HashMap<UUID, Auction> data, String tableName) {
-		
+		Logger.log("Writing " + data.size() + " auctions to temp database");
 		for(UUID id : data.keySet()) {
 			try {
 				auction = data.get(id);
@@ -91,12 +92,13 @@ public class DatabaseUtil {
 	}
 	
 	public static void databaseTransfer() {
+		Logger.log("Transfering auctions from temp database");
 		try {
 			statement.execute("insert into auction_log\n" + 
 					"select * from auctions\n" + 
-					"where end_time < " + (System.currentTimeMillis() - 1.8e6));
+					"where end_time < " + (System.currentTimeMillis() - 300000));
 			statement.execute("delete from auctions\n" + 
-					"where end_time < " + (System.currentTimeMillis() - 1.8e6));
+					"where end_time < " + (System.currentTimeMillis() - 300000));
 		} catch (SQLException e) {
 			e.printStackTrace();
 		}
