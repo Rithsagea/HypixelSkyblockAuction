@@ -34,7 +34,7 @@ public class DataDownloaderTask extends TimerTask {
 			DatabaseUtil.writeToTable(auctions, "auctions");
 			
 			//moves stuff from temp storage every 30 requests
-			if(requests % 30 == 0)
+			if(requests % 10 == 0)
 				DatabaseUtil.databaseTransfer();
 		}
 	}

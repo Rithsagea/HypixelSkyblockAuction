@@ -8,7 +8,10 @@ import com.rithsagea.skyblock.Auction;
 
 public class CalcUtil {
 	
-	public static Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("PST"));
+	
+	//PST - California
+	//EST - New York
+	public static Calendar calendar = Calendar.getInstance(TimeZone.getTimeZone("EST"));
 	
 	public static void weightedAverage(Set<Auction> auctions) {
 		double[] item_count = new double[24];
@@ -17,7 +20,9 @@ public class CalcUtil {
 		int hour = 0;
 		
 		for(Auction auction : auctions) {
+			
 			calendar.setTimeInMillis(auction.end);
+			System.out.format("%s x%d - %.2f\n", auction.item_name, auction.amount, auction.price);
 			hour = calendar.get(Calendar.HOUR_OF_DAY);
 			price_total[hour] += auction.price * auction.amount;
 			item_count[hour] += auction.amount;
