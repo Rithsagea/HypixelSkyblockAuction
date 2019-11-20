@@ -62,7 +62,7 @@ public class Main {
 		
 		log = new JTextArea(1, 1);
 		log.setBounds(260, 10, 500, 680);
-//		log.setEditable(false);
+		log.setEditable(false);
 		
 		downloaderInfo = new JLabel();
 		downloaderInfo.setBounds(10, 140, 240, 120);
@@ -106,7 +106,7 @@ public class Main {
 			public void actionPerformed(ActionEvent e) {
 				Set<Auction> data = new HashSet<Auction>();
 				DatabaseUtil.readFromTable(data, itemFilterField.getText(), "auction_log");
-				System.out.println("-=-=- " + itemFilterField.getText() + " -=-=-\n");
+				Logger.log("-=-=- " + itemFilterField.getText() + " -=-=-");
 				CalcUtil.weightedAverage(data);
 			}
 		});
