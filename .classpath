@@ -69,5 +69,6 @@
 	<classpathentry kind="lib" path="/Users/rithsagea/.gradle/caches/minecraft/net/minecraftforge/forge/1.8.9-11.15.1.2318-1.8.9/start"/>
 	<classpathentry kind="lib" path="/Library/Java/Extensions/mysql-connector-java-8.0.18.jar"/>
 	<classpathentry kind="lib" path="libs/commons-collections4-4.4.jar"/>
+	<classpathentry kind="lib" path="libs/jfreechart-1.5.0.jar" sourcepath="libs/jfreechart-1.5.0-sources.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
