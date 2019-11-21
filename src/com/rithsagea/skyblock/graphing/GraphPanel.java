@@ -1,5 +1,8 @@
 package com.rithsagea.skyblock.graphing;
 
+import java.awt.Point;
+import java.util.ArrayList;
+
 import javax.swing.JPanel;
 
 public class GraphPanel extends JPanel {
@@ -11,8 +14,14 @@ public class GraphPanel extends JPanel {
 	private static int xMax = 0;
 	private static int yMax = 0;
 	
+	private ArrayList<Point> points = new ArrayList<Point>();
+	
 	public GraphPanel() {
 		
+	}
+	
+	public void addPoint(Point point) {
+		points.add(point);
 	}
 	
 	public void update() {
